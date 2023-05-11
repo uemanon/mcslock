@@ -5,6 +5,8 @@ import (
 	"sync"
 	"sync/atomic"
 	"unsafe"
+
+	"golang.org/x/sys/cpu"
 )
 
 const (
@@ -14,13 +16,13 @@ const (
 
 // SpinLock is a mcs-spinlock implementation
 type SpinLock struct {
-	_    [48]byte
+	_    cpu.CacheLinePad
 	tail *mcs
 	cur  *mcs
 }
 
 type mcs struct {
-	_     [48]byte
+	_     cpu.CacheLinePad
 	next  *mcs
 	state int32
 }
